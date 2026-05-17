@@ -22,7 +22,7 @@ func NewWorld(width, height int, maxInitLiveCells int) *World {
 	return w
 }
 
-// init inits world with a random state.
+// init initializes the world with a random state.
 func (w *World) init(maxLiveCells int) {
 	for i := 0; i < maxLiveCells; i++ {
 		x := rand.IntN(w.width)
@@ -66,7 +66,36 @@ func (w *World) Update() {
 }
 
 // neighbourCount calculates the Moore neighborhood of (x, y).
+//
+// ┌──────┬─────────────────────────────────┐
+// │ Step │          What happens           │
+// ├──────┼─────────────────────────────────┤
+// │ 1    │ Start counter at 0              │
+// ├──────┼─────────────────────────────────┤
+// │ 2    │ Visit all 8 surrounding squares │
+// ├──────┼─────────────────────────────────┤
+// │ 3    │ Skip the cell itself            │
+// ├──────┼─────────────────────────────────┤
+// │ 4    │ Skip squares off the grid edge  │
+// ├──────┼─────────────────────────────────┤
+// │ 5    │ Count each living neighbor      │
+// ├──────┼─────────────────────────────────┤
+// │ 6    │ Return the total                │
+// └──────┴─────────────────────────────────┘
+//
+// Imagine a grid of squares, like graph paper. Each square can be either
+// alive or dead. To decide if a cell lives or dies next turn, we need to
+// count how many of its neighbors (the squares touching it) are alive.
+//
+// Every cell has up to 8 neighbors — the squares directly above, below, left,
+// right, and the 4 diagonals. Think of it like the 8 squares surrounding a
+// king in chess.
+
+// We're given the grid a, its size (width, height), and the position (x, y)
+// of the cell we're checking.
+//
 func neighbourCount(a []bool, width, height, x, y int) int {
+
 // Start a counter at zero. We'll add 1 each time we find a living neighbor.
 //
 	c := 0
