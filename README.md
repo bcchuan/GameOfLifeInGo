@@ -1,1 +1,1 @@
-This is a re-factored version of the Game of Life (Ebitengine Demo).
+This is a Go program, from the Ebitengine Demo, refactored and tweaked here to show its beauty.
