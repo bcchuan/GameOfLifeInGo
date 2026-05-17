@@ -67,21 +67,42 @@ func (w *World) Update() {
 
 // neighbourCount calculates the Moore neighborhood of (x, y).
 func neighbourCount(a []bool, width, height, x, y int) int {
+// Start a counter at zero. We'll add 1 each time we find a living neighbor.
+//
 	c := 0
+// We loop through a 3×3 area centered on (x, y). Think of i and j as small
+// steps:
+// - i moves us left (-1), stay (0), or right (+1)
+// - j moves us up (-1), stay (0), or down (+1)
+//
+// This visits all 9 squares in the 3×3 box (including the center cell itself)
+//
 	for j := -1; j <= 1; j++ {
 		for i := -1; i <= 1; i++ {
+// When both steps are zero, we're looking at the cell itself — skip it!
+// We only want to count neighbors, not the cell we're checking.
+//
 			if i == 0 && j == 0 {
 				continue
 			}
+// Calculate the neighbor's position. If it falls off the edge of the grid
+// (e.g., a cell on the left wall has no neighbor to its left), skip it.
+// The grid doesn't wrap around.
+//
 			x2 := x + i
 			y2 := y + j
 			if x2 < 0 || y2 < 0 || width <= x2 || height <= y2 {
 				continue
 			}
+// If the neighbor is alive, add 1 to our counter.
+// (y2*width+x2 converts the 2D position into a spot in the flat list.)
+//
 			if a[y2*width+x2] {
 				c++
 			}
 		}
 	}
+// Return the final count — could be anywhere from 0 to 8.
+//
 	return c
 }
